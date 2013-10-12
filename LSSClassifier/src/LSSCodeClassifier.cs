@@ -16,7 +16,8 @@ namespace FourWalledCubicle.LSSClassifier
 
         private static readonly Dictionary<LSSParser.LSSLineTypes, string> mClassifierTypeNames = new Dictionary<LSSParser.LSSLineTypes, string>() {
             { LSSParser.LSSLineTypes.SYMBOL_DEF, "lss.symboldef" },
-            { LSSParser.LSSLineTypes.SOURCE_CODE, "lss.srccode" }
+            { LSSParser.LSSLineTypes.COMMENT, "lss.comment" },
+            { LSSParser.LSSLineTypes.SOURCE_FRAGMENT, "lss.srccode" },
         };
 
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;

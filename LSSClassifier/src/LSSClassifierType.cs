@@ -33,9 +33,24 @@ namespace FourWalledCubicle.LSSClassifier
     {
         public LSSSourceCodeDefinitionFormat()
         {
-            this.DisplayName = "LSS Source Code Section";
+            this.DisplayName = "LSS Source Code Fragment";
             this.IsBold = true;
             this.ForegroundColor = Colors.Gray;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "lss.comment")]
+    [Name("lss.comment")]
+    [UserVisible(true)]
+    [Order(After = Priority.Default)]
+    internal sealed class LSSCommentDefinitionFormat : ClassificationFormatDefinition
+    {
+        public LSSCommentDefinitionFormat()
+        {
+            this.DisplayName = "LSS ASM Comment";
+            this.IsBold = true;
+            this.ForegroundColor = Colors.Green;
         }
     }
 
@@ -48,5 +63,9 @@ namespace FourWalledCubicle.LSSClassifier
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("lss.srccode")]
         internal static ClassificationTypeDefinition LSSSourceCodeDefinition;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name("lss.comment")]
+        internal static ClassificationTypeDefinition LSSCommentDefinition;
     }
 }

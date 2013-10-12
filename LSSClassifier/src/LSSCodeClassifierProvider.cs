@@ -16,9 +16,11 @@ namespace FourWalledCubicle.LSSClassifier
         [Import]
         internal IClassificationTypeRegistryService mClassificationRegistry = null;
 
-        public IClassifier GetClassifier(ITextBuffer textBuffer)
+        public IClassifier GetClassifier(ITextBuffer buffer)
         {
-            return textBuffer.Properties.GetOrCreateSingletonProperty(() => new LSSCodeClassifier(textBuffer, mClassificationRegistry));
+            Func<IClassifier> classifierFunc =
+                () => new LSSCodeClassifier(buffer, mClassificationRegistry) as IClassifier;
+            return buffer.Properties.GetOrCreateSingletonProperty<IClassifier>(classifierFunc);
         }
     }
 }

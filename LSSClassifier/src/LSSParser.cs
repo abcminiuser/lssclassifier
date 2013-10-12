@@ -12,8 +12,8 @@ namespace FourWalledCubicle.LSSClassifier
         public enum LSSLineTypes
         {
             SYMBOL_DEF,
-            SOURCE_CODE,
-            UNKNOWN
+            COMMENT,
+            SOURCE_FRAGMENT
         };
 
         private readonly Regex mSymbolDefRegex = new Regex(@"^[a-f0-9]* <[^>]*>:", RegexOptions.Compiled);
@@ -23,21 +23,24 @@ namespace FourWalledCubicle.LSSClassifier
         {
             foreach (var line in span.Snapshot.Lines)
             {
-                LSSLineTypes parsedLineType = ClassifyLine(line.GetText());
+                string text = line.GetText();
 
-                if (parsedLineType != LSSLineTypes.UNKNOWN)
-                    yield return new Tuple<LSSLineTypes, SnapshotSpan>(parsedLineType, new SnapshotSpan(span.Snapshot, line.Start, line.Length));
+                if (mSymbolDefRegex.Match(text).Success)
+                {
+                    yield return new Tuple<LSSLineTypes, SnapshotSpan>(LSSLineTypes.SYMBOL_DEF, new SnapshotSpan(span.Snapshot, line.Start, line.Length));
+                }
+                else if (mASMLineRegex.Match(text).Success)
+                {
+                    int commentStart = text.LastIndexOf(';');
+
+                    if (commentStart > 0)
+                        yield return new Tuple<LSSLineTypes, SnapshotSpan>(LSSLineTypes.COMMENT, new SnapshotSpan(span.Snapshot, line.Start + commentStart, line.Length - commentStart));                    
+                }
+                else
+                {
+                    yield return new Tuple<LSSLineTypes, SnapshotSpan>(LSSLineTypes.SOURCE_FRAGMENT, new SnapshotSpan(span.Snapshot, line.Start, line.Length));
+                }
             }
-        }
-
-        private LSSLineTypes ClassifyLine(string text)
-        {
-            if (mSymbolDefRegex.Match(text).Success)
-                return LSSLineTypes.SYMBOL_DEF;
-            else if (!mASMLineRegex.Match(text).Success)
-                return LSSLineTypes.SOURCE_CODE;
-            else
-                return LSSLineTypes.UNKNOWN;
         }
     }
 }
