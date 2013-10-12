@@ -137,6 +137,7 @@
     <Compile Include="src\LSSCodeClassifier.cs" />
     <Compile Include="src\LSSCodeClassifierProvider.cs" />
     <Compile Include="src\LSSContentDefinition.cs" />
+    <Compile Include="src\LSSParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

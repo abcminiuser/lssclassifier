@@ -10,24 +10,43 @@ using System.Windows.Media;
 namespace FourWalledCubicle.LSSClassifier
 {
     [Export(typeof(EditorFormatDefinition))]
-    [ClassificationType(ClassificationTypeNames = "lss.codestart")]
-    [Name("lss.codestart")]
-    [DisplayName("LSS File")]
+    [ClassificationType(ClassificationTypeNames = "lss.symboldef")]
+    [Name("lss.symboldef")]
     [UserVisible(true)]
     [Order(After = Priority.Default)]
-    internal sealed class LSSCodeStartFormat : ClassificationFormatDefinition
+    internal sealed class LSSSymbolDefinitionFormat : ClassificationFormatDefinition
     {
-        public LSSCodeStartFormat()
+        public LSSSymbolDefinitionFormat()
         {
+            this.DisplayName = "LSS Symbol Definition";
             this.IsBold = true;
-            this.BackgroundColor = Colors.Brown;
+            this.ForegroundColor = Colors.Brown;
+        }
+    }
+
+    [Export(typeof(EditorFormatDefinition))]
+    [ClassificationType(ClassificationTypeNames = "lss.srccode")]
+    [Name("lss.srccode")]
+    [UserVisible(true)]
+    [Order(After = Priority.Default)]
+    internal sealed class LSSSourceCodeDefinitionFormat : ClassificationFormatDefinition
+    {
+        public LSSSourceCodeDefinitionFormat()
+        {
+            this.DisplayName = "LSS Source Code Section";
+            this.IsBold = true;
+            this.ForegroundColor = Colors.Gray;
         }
     }
 
     internal static class LSSClassificationType
     {
         [Export(typeof(ClassificationTypeDefinition))]
-        [Name("lss.codestart")]
-        internal static ClassificationTypeDefinition LSSCodeStartDefinition;
+        [Name("lss.symboldef")]
+        internal static ClassificationTypeDefinition LSSSymbolDefinition;
+
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name("lss.srccode")]
+        internal static ClassificationTypeDefinition LSSSourceCodeDefinition;
     }
 }

@@ -11,7 +11,7 @@ namespace FourWalledCubicle.LSSClassifier
     {
         [Export]
         [Name("lss")]
-        [BaseDefinition("text")]
+        [BaseDefinition("code")]
         internal static ContentTypeDefinition lssContentTypeDefinition;
         
         [Export]

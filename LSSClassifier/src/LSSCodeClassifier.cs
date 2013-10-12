@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text;
+using System.Text.RegularExpressions;
 
 namespace FourWalledCubicle.LSSClassifier
 {
@@ -11,6 +12,12 @@ namespace FourWalledCubicle.LSSClassifier
     {
         private ITextBuffer mTextBuffer;
         private IClassificationTypeRegistryService mClassificationTypeRegistry;
+        private List<ClassificationSpan> classifications = new List<ClassificationSpan>();
+
+        private static readonly Dictionary<LSSParser.LSSLineTypes, string> mClassifierTypeNames = new Dictionary<LSSParser.LSSLineTypes, string>() {
+            { LSSParser.LSSLineTypes.SYMBOL_DEF, "lss.symboldef" },
+            { LSSParser.LSSLineTypes.SOURCE_CODE, "lss.srccode" }
+        };
 
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
 
@@ -24,17 +31,29 @@ namespace FourWalledCubicle.LSSClassifier
 
         void OnBufferChanged(object sender, TextContentChangedEventArgs e)
         {
+            if (e.After != mTextBuffer.CurrentSnapshot)
+                return;
 
+            foreach (ITextChange change in e.Changes)
+            {
+                if (ClassificationChanged != null)
+                    ClassificationChanged(this, new ClassificationChangedEventArgs(new SnapshotSpan(e.After, change.NewSpan)));
+            }
         }
 
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
-            IList<ClassificationSpan> spans = new List<ClassificationSpan>();
+            List<ClassificationSpan> classifications = new List<ClassificationSpan>();
 
-            var sss = new SnapshotSpan(mTextBuffer.CurrentSnapshot, 0, mTextBuffer.CurrentSnapshot.Length);
-            spans.Add(new ClassificationSpan(sss, mClassificationTypeRegistry.GetClassificationType("lss.codestart")));
+            LSSParser lssParser = new LSSParser();
 
-            return spans;
+            foreach (Tuple<LSSParser.LSSLineTypes, SnapshotSpan> segment in lssParser.Parse(span))
+            {
+                IClassificationType classificationType = mClassificationTypeRegistry.GetClassificationType(mClassifierTypeNames[segment.Item1]);
+                classifications.Add(new ClassificationSpan(segment.Item2, classificationType));
+            }
+
+            return classifications;
         }
     }
 }
