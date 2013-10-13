@@ -39,7 +39,9 @@ namespace FourWalledCubicle.LSSClassifier
             if (span.Length == 0)
                 return classifications;
 
-            foreach (Tuple<LSSParser.LSSLineTypes, SnapshotSpan> segment in LSSParser.Parse(span))
+            ITextSnapshotLine line = span.Start.GetContainingLine();
+
+            foreach (Tuple<LSSParser.LSSLineTypes, SnapshotSpan> segment in LSSParser.Parse(line))
             {
                 IClassificationType classificationType = mClassificationTypeRegistry.GetClassificationType(mClassifierTypeNames[segment.Item1]);
                 classifications.Add(new ClassificationSpan(segment.Item2, classificationType));

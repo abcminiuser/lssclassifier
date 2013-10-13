@@ -22,15 +22,14 @@ namespace FourWalledCubicle.LSSClassifier
         private static readonly Regex mSymbolDefRegex = new Regex(@"^[a-f0-9]* <[^>]*>:", RegexOptions.Compiled);
         private static readonly Regex mASMLineRegex = new Regex(@"^\s*[a-f0-9]*:\s*", RegexOptions.Compiled);
 
-        public static IEnumerable<Tuple<LSSLineTypes, SnapshotSpan>> Parse(SnapshotSpan span)
+        public static IEnumerable<Tuple<LSSLineTypes, SnapshotSpan>> Parse(ITextSnapshotLine line)
         {
-            ITextSnapshotLine line = span.Start.GetContainingLine();
             string text = line.GetText();
 
             if (mSymbolDefRegex.Match(text).Success)
             {
                 yield return new Tuple<LSSLineTypes, SnapshotSpan>(
-                    LSSLineTypes.SYMBOL_DEF, new SnapshotSpan(span.Snapshot, line.Start, line.Length));
+                    LSSLineTypes.SYMBOL_DEF, new SnapshotSpan(line.Snapshot, line.Start, line.Length));
             }
             else if (mASMLineRegex.Match(text).Success)
             {
@@ -64,7 +63,7 @@ namespace FourWalledCubicle.LSSClassifier
                     }
 
                     yield return new Tuple<LSSLineTypes, SnapshotSpan>(
-                        currentType.Value, new SnapshotSpan(span.Snapshot, pos, codeSections[i].Length));
+                        currentType.Value, new SnapshotSpan(line.Snapshot, pos, codeSections[i].Length));
 
                     pos += codeSections[i].Length + 1;
                 }
@@ -72,7 +71,7 @@ namespace FourWalledCubicle.LSSClassifier
             else
             {
                 yield return new Tuple<LSSLineTypes, SnapshotSpan>(
-                    LSSLineTypes.SOURCE_FRAGMENT, new SnapshotSpan(span.Snapshot, line.Start, line.Length));
+                    LSSLineTypes.SOURCE_FRAGMENT, new SnapshotSpan(line.Snapshot, line.Start, line.Length));
             }
         }
     }
