@@ -9,6 +9,8 @@
     <MoreInfoUrl>http://www.fourwalledcubicle.com</MoreInfoUrl>
     <InstalledByMsi>false</InstalledByMsi>
     <License>License.txt</License>
+    <Icon>Icon.png</Icon>
+    <PreviewImage>Preview.png</PreviewImage>
     <SupportedProducts>
       <IsolatedShell Version="6.1">AtmelStudio</IsolatedShell>
     </SupportedProducts>

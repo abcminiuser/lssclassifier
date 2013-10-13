@@ -12,11 +12,11 @@ namespace FourWalledCubicle.LSSClassifier
         [Export]
         [Name("lss")]
         [BaseDefinition("code")]
-        internal static ContentTypeDefinition lssContentTypeDefinition;
+        internal static ContentTypeDefinition lssContentTypeDefinition { get; set; }
         
         [Export]
         [ContentType("lss")]
         [FileExtension(".lss")]
-        internal static FileExtensionToContentTypeDefinition lssContentTypeDefinitionFileExtension;
+        internal static FileExtensionToContentTypeDefinition lssContentTypeDefinitionFileExtension { get; set; }
     }
 }
