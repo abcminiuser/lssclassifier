@@ -12,7 +12,9 @@ namespace FourWalledCubicle.LSSClassifier
     {
         private ITextBuffer mTextBuffer;
         private IClassificationTypeRegistryService mClassificationTypeRegistry;
-        private List<ClassificationSpan> classifications = new List<ClassificationSpan>();
+
+        private readonly List<ClassificationSpan> classifications = new List<ClassificationSpan>();
+        private readonly LSSParser lssParser = new LSSParser();
 
         private static readonly Dictionary<LSSParser.LSSLineTypes, string> mClassifierTypeNames = new Dictionary<LSSParser.LSSLineTypes, string>() {
             { LSSParser.LSSLineTypes.SYMBOL_DEF, "lss.symboldef" },
@@ -47,9 +49,7 @@ namespace FourWalledCubicle.LSSClassifier
 
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
-            List<ClassificationSpan> classifications = new List<ClassificationSpan>();
-
-            LSSParser lssParser = new LSSParser();
+            classifications.Clear();            
 
             foreach (Tuple<LSSParser.LSSLineTypes, SnapshotSpan> segment in lssParser.Parse(span))
             {
