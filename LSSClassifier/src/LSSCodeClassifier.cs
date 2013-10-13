@@ -8,13 +8,12 @@ using System.Text.RegularExpressions;
 
 namespace FourWalledCubicle.LSSClassifier
 {
-    class LSSCodeClassifier : IClassifier
+    internal sealed class LSSCodeClassifier : IClassifier
     {
         private ITextBuffer mTextBuffer;
         private IClassificationTypeRegistryService mClassificationTypeRegistry;
 
         private readonly List<ClassificationSpan> classifications = new List<ClassificationSpan>();
-        private readonly LSSParser lssParser = new LSSParser();
 
         private static readonly Dictionary<LSSParser.LSSLineTypes, string> mClassifierTypeNames = new Dictionary<LSSParser.LSSLineTypes, string>() {
             { LSSParser.LSSLineTypes.SYMBOL_DEF, "lss.symboldef" },
@@ -51,7 +50,7 @@ namespace FourWalledCubicle.LSSClassifier
         {
             classifications.Clear();            
 
-            foreach (Tuple<LSSParser.LSSLineTypes, SnapshotSpan> segment in lssParser.Parse(span))
+            foreach (Tuple<LSSParser.LSSLineTypes, SnapshotSpan> segment in LSSParser.Parse(span))
             {
                 IClassificationType classificationType = mClassificationTypeRegistry.GetClassificationType(mClassifierTypeNames[segment.Item1]);
                 classifications.Add(new ClassificationSpan(segment.Item2, classificationType));

@@ -11,7 +11,7 @@ namespace FourWalledCubicle.LSSClassifier
 {
     [Export(typeof(IClassifierProvider))]
     [ContentType("lss")]
-    class LSSClassifierProvider : IClassifierProvider
+    internal class LSSClassifierProvider : IClassifierProvider
     {
         [Import]
         internal IClassificationTypeRegistryService mClassificationRegistry = null;

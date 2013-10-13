@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace FourWalledCubicle.LSSClassifier
 {
-    class LSSParser
+    internal abstract class LSSParser
     {
         public enum LSSLineTypes
         {
@@ -19,12 +19,12 @@ namespace FourWalledCubicle.LSSClassifier
             SOURCE_FRAGMENT
         };
 
-        private readonly Regex mSymbolDefRegex = new Regex(@"^[a-f0-9]* <[^>]*>:", RegexOptions.Compiled);
-        private readonly Regex mASMLineRegex = new Regex(@"^\s*[a-f0-9]*:\s*", RegexOptions.Compiled);
+        private static readonly Regex mSymbolDefRegex = new Regex(@"^[a-f0-9]* <[^>]*>:", RegexOptions.Compiled);
+        private static readonly Regex mASMLineRegex = new Regex(@"^\s*[a-f0-9]*:\s*", RegexOptions.Compiled);
 
-        public IEnumerable<Tuple<LSSLineTypes, SnapshotSpan>> Parse(SnapshotSpan span)
+        public static IEnumerable<Tuple<LSSLineTypes, SnapshotSpan>> Parse(SnapshotSpan span)
         {
-            foreach (var line in span.Snapshot.Lines)
+            foreach (ITextSnapshotLine line in span.Snapshot.Lines)
             {
                 string text = line.GetText();
 
