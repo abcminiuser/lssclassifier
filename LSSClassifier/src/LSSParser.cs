@@ -54,7 +54,7 @@ namespace FourWalledCubicle.LSSClassifier
                             break;
 
                         case LSSLineTypes.ASM:
-                            if ((codeSections[i].Length > 0) && codeSections[i][0] == ';')
+                            if (codeSections[i].StartsWith(";"))
                                 currentType = LSSLineTypes.COMMENT;
                             break;
 
