@@ -24,57 +24,55 @@ namespace FourWalledCubicle.LSSClassifier
 
         public static IEnumerable<Tuple<LSSLineTypes, SnapshotSpan>> Parse(SnapshotSpan span)
         {
-            foreach (ITextSnapshotLine line in span.Snapshot.Lines)
+            ITextSnapshotLine line = span.Start.GetContainingLine();
+            string text = line.GetText();
+
+            if (mSymbolDefRegex.Match(text).Success)
             {
-                string text = line.GetText();
+                yield return new Tuple<LSSLineTypes, SnapshotSpan>(
+                    LSSLineTypes.SYMBOL_DEF, new SnapshotSpan(span.Snapshot, line.Start, line.Length));
+            }
+            else if (mASMLineRegex.Match(text).Success)
+            {
+                string[] codeSections = text.Split('\t');
+                LSSLineTypes? currentType = null;
+                int pos = line.Start;
 
-                if (mSymbolDefRegex.Match(text).Success)
+                for (int i = 0; i < codeSections.Length; i++)
                 {
-                    yield return new Tuple<LSSLineTypes, SnapshotSpan>(
-                        LSSLineTypes.SYMBOL_DEF, new SnapshotSpan(span.Snapshot, line.Start, line.Length));
-                }
-                else if (mASMLineRegex.Match(text).Success)
-                {
-                    string[] codeSections = text.Split('\t');
-                    LSSLineTypes? currentType = null;
-                    int pos = line.Start;
-
-                    for (int i = 0; i < codeSections.Length; i++)
+                    switch (currentType)
                     {
-                        switch (currentType)
-                        {
-                            case null:
-                                currentType = LSSLineTypes.ADDRESS;
-                                break;
+                        case null:
+                            currentType = LSSLineTypes.ADDRESS;
+                            break;
 
-                            case LSSLineTypes.ADDRESS:
-                                currentType = LSSLineTypes.ENCODING;
-                                break;
+                        case LSSLineTypes.ADDRESS:
+                            currentType = LSSLineTypes.ENCODING;
+                            break;
 
-                            case LSSLineTypes.ENCODING:
-                                currentType = LSSLineTypes.ASM;
-                                break;
+                        case LSSLineTypes.ENCODING:
+                            currentType = LSSLineTypes.ASM;
+                            break;
 
-                            case LSSLineTypes.ASM:
-                                if (codeSections[i][0] == ';')
-                                    currentType = LSSLineTypes.COMMENT;
-                                break;
+                        case LSSLineTypes.ASM:
+                            if ((codeSections[i].Length > 0) && codeSections[i][0] == ';')
+                                currentType = LSSLineTypes.COMMENT;
+                            break;
 
-                            case LSSLineTypes.COMMENT:
-                                break;
-                        }
-
-                        yield return new Tuple<LSSLineTypes, SnapshotSpan>(
-                            currentType.Value, new SnapshotSpan(span.Snapshot, pos, codeSections[i].Length));
-
-                        pos += codeSections[i].Length + 1;
+                        case LSSLineTypes.COMMENT:
+                            break;
                     }
-                }
-                else
-                {
+
                     yield return new Tuple<LSSLineTypes, SnapshotSpan>(
-                        LSSLineTypes.SOURCE_FRAGMENT, new SnapshotSpan(span.Snapshot, line.Start, line.Length));
+                        currentType.Value, new SnapshotSpan(span.Snapshot, pos, codeSections[i].Length));
+
+                    pos += codeSections[i].Length + 1;
                 }
+            }
+            else
+            {
+                yield return new Tuple<LSSLineTypes, SnapshotSpan>(
+                    LSSLineTypes.SOURCE_FRAGMENT, new SnapshotSpan(span.Snapshot, line.Start, line.Length));
             }
         }
     }

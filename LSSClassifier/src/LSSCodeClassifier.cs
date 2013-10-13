@@ -30,20 +30,6 @@ namespace FourWalledCubicle.LSSClassifier
         {
             mTextBuffer = buffer;
             mClassificationTypeRegistry = classifierTypeRegistry;
-
-            mTextBuffer.Changed += OnBufferChanged;
-        }
-
-        void OnBufferChanged(object sender, TextContentChangedEventArgs e)
-        {
-            if (e.After != mTextBuffer.CurrentSnapshot)
-                return;
-
-            foreach (ITextChange change in e.Changes)
-            {
-                if (ClassificationChanged != null)
-                    ClassificationChanged(this, new ClassificationChangedEventArgs(new SnapshotSpan(e.After, change.NewSpan)));
-            }
         }
 
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
