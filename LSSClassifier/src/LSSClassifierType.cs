@@ -99,26 +99,26 @@ namespace FourWalledCubicle.LSSClassifier
     {
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("lss.symboldef")]
-        internal static ClassificationTypeDefinition LSSSymbolDefinition;
+        internal static ClassificationTypeDefinition LSSSymbolDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("lss.srccode")]
-        internal static ClassificationTypeDefinition LSSSourceCodeDefinition;
+        internal static ClassificationTypeDefinition LSSSourceCodeDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("lss.address")]
-        internal static ClassificationTypeDefinition LSSAddressDefinition;
+        internal static ClassificationTypeDefinition LSSAddressDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("lss.encoding")]
-        internal static ClassificationTypeDefinition LSSEncodingDefinition;
+        internal static ClassificationTypeDefinition LSSEncodingDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("lss.instruction")]
-        internal static ClassificationTypeDefinition LSSInstructionDefinition;
+        internal static ClassificationTypeDefinition LSSInstructionDefinition { get; set; }
 
         [Export(typeof(ClassificationTypeDefinition))]
         [Name("lss.comment")]
-        internal static ClassificationTypeDefinition LSSCommentDefinition;
+        internal static ClassificationTypeDefinition LSSCommentDefinition { get; set; }
     }
 }

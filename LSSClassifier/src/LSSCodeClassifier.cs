@@ -48,7 +48,10 @@ namespace FourWalledCubicle.LSSClassifier
 
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)
         {
-            classifications.Clear();            
+            classifications.Clear();
+
+            if (span.Length == 0)
+                return classifications;
 
             foreach (Tuple<LSSParser.LSSLineTypes, SnapshotSpan> segment in LSSParser.Parse(span))
             {
