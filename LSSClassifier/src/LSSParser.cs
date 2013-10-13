@@ -37,7 +37,7 @@ namespace FourWalledCubicle.LSSClassifier
                 LSSLineTypes? currentType = null;
                 int pos = line.Start;
 
-                for (int i = 0; i < codeSections.Length; i++)
+                foreach (string currSection in codeSections)
                 {
                     switch (currentType)
                     {
@@ -54,7 +54,7 @@ namespace FourWalledCubicle.LSSClassifier
                             break;
 
                         case LSSLineTypes.ASM:
-                            if (codeSections[i].StartsWith(";"))
+                            if (currSection.StartsWith(";"))
                                 currentType = LSSLineTypes.COMMENT;
                             break;
 
@@ -63,9 +63,9 @@ namespace FourWalledCubicle.LSSClassifier
                     }
 
                     yield return new Tuple<LSSLineTypes, SnapshotSpan>(
-                        currentType.Value, new SnapshotSpan(line.Snapshot, pos, codeSections[i].Length));
+                        currentType.Value, new SnapshotSpan(line.Snapshot, pos, currSection.Length));
 
-                    pos += codeSections[i].Length + 1;
+                    pos += currSection.Length + 1;
                 }
             }
             else
