@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text;
-using System.Text.RegularExpressions;
+using Microsoft.VisualStudio.Text.Classification;
 
 namespace FourWalledCubicle.LSSClassifier
 {
     internal sealed class LSSCodeClassifier : IClassifier
     {
-        private ITextBuffer mTextBuffer;
-        private IClassificationTypeRegistryService mClassificationTypeRegistry;
-
-        private readonly List<ClassificationSpan> classifications = new List<ClassificationSpan>();
-
         private static readonly Dictionary<LSSParser.LSSLineTypes, string> mClassifierTypeNames = new Dictionary<LSSParser.LSSLineTypes, string>() {
             { LSSParser.LSSLineTypes.SYMBOL_DEF, "lss.symboldef" },
             { LSSParser.LSSLineTypes.ADDRESS, "lss.address" },
@@ -24,7 +16,13 @@ namespace FourWalledCubicle.LSSClassifier
             { LSSParser.LSSLineTypes.SOURCE_FRAGMENT, "lss.srccode" },
         };
 
+        private readonly ITextBuffer mTextBuffer;
+        private readonly IClassificationTypeRegistryService mClassificationTypeRegistry;
+        private readonly List<ClassificationSpan> classifications = new List<ClassificationSpan>();
+
+#pragma warning disable 0067
         public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
+#pragma warning restore 0067
 
         public LSSCodeClassifier(ITextBuffer buffer, IClassificationTypeRegistryService classifierTypeRegistry)
         {

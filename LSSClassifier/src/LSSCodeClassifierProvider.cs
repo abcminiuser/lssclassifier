@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Windows.Media;
-using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
@@ -14,7 +11,7 @@ namespace FourWalledCubicle.LSSClassifier
     internal class LSSClassifierProvider : IClassifierProvider
     {
         [Import]
-        internal IClassificationTypeRegistryService mClassificationRegistry = null;
+        internal IClassificationTypeRegistryService mClassificationRegistry { get; set; }
 
         public IClassifier GetClassifier(ITextBuffer buffer)
         {

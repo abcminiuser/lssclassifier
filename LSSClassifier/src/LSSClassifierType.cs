@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.Text.Classification;
-using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Utilities;
+﻿using System.ComponentModel.Composition;
 using System.Windows.Media;
+using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Utilities;
 
 namespace FourWalledCubicle.LSSClassifier
 {
@@ -34,8 +30,7 @@ namespace FourWalledCubicle.LSSClassifier
         public LSSSourceCodeDefinitionFormat()
         {
             this.DisplayName = "LSS Source Code Fragment";
-            this.IsBold = true;
-            this.ForegroundColor = Colors.Gray;
+            this.ForegroundColor = Colors.Olive;
         }
     }
 
